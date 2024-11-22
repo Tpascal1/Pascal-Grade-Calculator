@@ -5,8 +5,10 @@ def read_students():
     with open('data/students.txt', 'r') as file:
         for line in file:
             line = line.strip()
-            student_id, student_name = line.split(',')
-            students[student_id] = student_name
+            if not line or ',' not in line:  # Skip empty or invalid lines
+                continue
+            student_id, student_name = line.split(',', 1)  # Ensure correct unpacking
+            students[student_id.strip()] = student_name.strip()
     return students
 
 
@@ -14,21 +16,26 @@ def read_assignments():
     assignments = {}
     with open('data/assignments.txt', 'r') as file:
         for line in file:
-            assignment_name ,assignment_id, point_value = line.strip().split(',')
-            assignments[assignment_id] = (assignment_name, int(point_value))
+            line = line.strip()
+            if not line or line.count(',') < 2:  # Ensure line has at least 3 parts
+                continue
+            assignment_name, assignment_id, point_value = line.split(',', 2)
+            assignments[assignment_id.strip()] = (assignment_name.strip(), int(point_value.strip()))
     return assignments
 
 
 def read_submission():
     submission = {}
-    with open('data/submission.txt', 'r') as file:
+    with open('data/submissions.txt', 'r') as file:
         for line in file:
-            student_id, assignment_id, score = line.strip().split(',')
-            if assignment_id not in submission:
-                submission[assignment_id] = []
-            submission[assignment_id].append((student_id, float(score)))
-    return submission
-
+            line = line.strip()
+            if not line:
+                continue
+            student_id, assignment_id, score = line.split(',')
+            if assignment_id not in submissions:
+                submissions[assignment_id] = []
+            submissions[assignment_id].append((student_id.strip(), float(score.strip())))
+    return submissions
 
 def calculate_grade(student_name, students, assignments, submission):
     student_id = next((sid for sid, name in students.items() if name.lower() == student_name.lower()), None)
@@ -46,14 +53,15 @@ def calculate_grade(student_name, students, assignments, submission):
 
 
 def assignment_stats(assignment_names, assignments, submission):
-    assignment_id = next((aid for aid, (name,_) in assignments.items() if name.lower() == assignment_names.lower()), None)
+    assignment_id = next((aid for aid, (name, _) in assignments.items() if name.lower() == assignment_name.lower()),
+                         None)
     if not assignment_id:
         print("Assignment not found")
         return
 
-    score = [ score for sid, score in submission.get(assignment_id,[])]
-    if not score:
-        print("No submission found for this assignment")
+    scores = [score for _, score in submissions.get(assignment_id, [])]
+    if not scores:
+        print("No submissions found for this assignment")
         return
 
     min_score, max_score, avg_score = min(score), max(score), sum(score)/len(score)
@@ -74,7 +82,7 @@ def assignment_graph(assignment_name, assignments, submission):
         print("No submission found for this assignment")
         return
 
-    plt.hist(scores, bins=[0,25,50,15,100])
+    plt.hist(scores, bins=[0,25,50,75,100])
     plt.title(f"Score Distribution for {assignmnet_name}")
     plt.xlabel("Score Percentage")
     plt.ylabel("Number of Students")
