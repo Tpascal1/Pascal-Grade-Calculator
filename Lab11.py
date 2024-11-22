@@ -1,4 +1,6 @@
+import os
 import matplotlib.pyplot as plt
+
 
 def read_students():
     students = {}
@@ -25,16 +27,27 @@ def read_assignments():
 
 
 def read_submission():
-    submission = {}
-    with open('data/submissions.txt', 'r') as file:
-        for line in file:
-            line = line.strip()
-            if not line:
-                continue
-            student_id, assignment_id, score = line.split(',')
-            if assignment_id not in submissions:
-                submissions[assignment_id] = []
-            submissions[assignment_id].append((student_id.strip(), float(score.strip())))
+    submissions = {}
+    submissions_dir = 'data/submissions'
+
+    if not os.path.exists(submissions_dir):
+        print(f"Error: Submissions directory '{submissions_dir}' not found.")
+        return submissions
+
+    for file_name in os.listdir(submissions_dir):
+        if file_name.endswith('.txt'):
+            file_path = os.path.join(submissions_dir, file_name)
+            with open(file_path, 'r') as file:
+                for line in file:
+                    line = line.strip()
+                    if not line or line.count(',') != 2:
+                        # Skip lines that do not have exactly 2 commas (3 values)
+                        continue
+                    student_id, assignment_id, score = line.split(',')
+                    if assignment_id not in submissions:
+                        submissions[assignment_id] = []
+                    submissions[assignment_id].append((student_id.strip(), float(score.strip())))
+
     return submissions
 
 def calculate_grade(student_name, students, assignments, submission):
