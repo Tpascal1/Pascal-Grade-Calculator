@@ -69,7 +69,7 @@ def calculate_grade(student_name, students, assignments, submissions):
 
 
 def assignment_stats(assignment_names, assignments, submission):
-    assignment_id = next((aid for aid, (name, _) in assignments.items() if name.lower() == assignment_name.lower()),
+    assignment_id = next((aid for aid, (name, _) in assignments.items() if name.lower() == assignment_names.lower()),
                          None)
     if not assignment_id:
         print("Assignment not found")
