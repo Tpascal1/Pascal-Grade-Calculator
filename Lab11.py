@@ -1,4 +1,5 @@
 import os
+import math
 import matplotlib.pyplot as plt
 
 
@@ -80,9 +81,10 @@ def assignment_stats(assignment_names, assignments, submissions):
         return
 
     min_score, max_score, avg_score = min(score), max(score), sum(score)/len(score)
-    print(f"min:{min_score}%")
-    print(f"max:{max_score}%")
-    print(f"avg:{round(avg_score)}%")
+    print(f"Avg:{math.floor(avg_score)}%")
+    print(f"Min:{min_score}%")
+    print(f"Max:{max_score}%")
+
 
 
 def assignment_graph(assignment_name, assignments, submission):
@@ -113,7 +115,7 @@ def main():
         print("\n1. Student grade")
         print("2. Assignment statistics")
         print("3. Assignment graph")
-        choice = input("Enter your choice: ")
+        choice = input("Enter your selection: ")
 
         if choice == "1":
             student_name = input("What is the student's name: ")
