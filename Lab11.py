@@ -1,8 +1,8 @@
+
 import os
 import matplotlib.pyplot as plt
 
 
-# Read students from file
 def read_students():
     students = {}
     with open('data/students.txt', 'r') as file:
@@ -16,7 +16,7 @@ def read_students():
     return students
 
 
-# Read assignments from file
+
 def read_assignments():
     assignments = {}
     with open('data/assignments.txt', 'r') as file:
@@ -29,7 +29,7 @@ def read_assignments():
     return assignments
 
 
-# Read submissions from the folder
+
 def read_submissions():
     submissions = {}
     submissions_dir = 'data/submissions'
@@ -46,13 +46,11 @@ def read_submissions():
                     if assignment_id not in submissions:
                         submissions[assignment_id] = []
                     submissions[assignment_id].append((student_id.strip(), float(score.strip())))
+
     return submissions
 
-
-# Calculate a student's grade
 def calculate_grade(student_name, students, assignments, submissions):
-    student_id = next((sid for sid, name in students.items() if name.lower().strip() == student_name.lower().strip()),
-                      None)
+    student_id = next((sid for sid, name in students.items() if name.lower().strip() == student_name.lower().strip()), None)
 
     if not student_id:
         print("Student not found")
@@ -68,11 +66,11 @@ def calculate_grade(student_name, students, assignments, submissions):
     print(f"{grade_percent}%")
 
 
-# Generate statistics for an assignment
-def assignment_stats(assignment_name, assignments, submissions):
-    assignment_id = next(
-        (aid for aid, (name, _) in assignments.items() if name.lower().strip() == assignment_name.lower().strip()),
-        None)
+
+
+def assignment_stats(assignment_names, assignments, submission):
+    assignment_id = next((aid for aid, (name, _) in assignments.items() if name.lower() == assignment_name.lower()),
+                         None)
     if not assignment_id:
         print("Assignment not found")
         return
@@ -82,33 +80,31 @@ def assignment_stats(assignment_name, assignments, submissions):
         print("No submissions found for this assignment")
         return
 
-    print(f"Min: {min(scores):.0f}%")
-    print(f"Max: {max(scores):.0f}%")
-    print(f"Avg: {round(sum(scores) / len(scores))}%")
+    min_score, max_score, avg_score = min(score), max(score), sum(score)/len(score)
+    print(f"min:{min_score}%")
+    print(f"max:{max_score}%")
+    print(f"avg:{round(avg_score)}%")
 
 
-# Display a histogram for an assignment
-def assignment_graph(assignment_name, assignments, submissions):
-    assignment_id = next(
-        (aid for aid, (name, _) in assignments.items() if name.lower().strip() == assignment_name.lower().strip()),
-        None)
+def assignment_graph(assignment_name, assignments, submission):
+    assignmnet_id = next((aid for aid, (name, _) in assignments.items() if name.lower() == assignment_name.lower()), None)
     if not assignment_id:
         print("Assignment not found")
         return
 
-    scores = [score for _, score in submissions.get(assignment_id, [])]
+
+    scores = [score for sid, score in submission.get(assignment_id,[])]
     if not scores:
-        print("No submissions found for this assignment")
+        print("No submission found for this assignment")
         return
 
-    plt.hist(scores, bins=[0, 25, 50, 75, 100], edgecolor='black')
-    plt.title(f"Score Distribution for {assignment_name}")
+    plt.hist(scores, bins=[0,25,50,75,100])
+    plt.title(f"Score Distribution for {assignmnet_name}")
     plt.xlabel("Score Percentage")
     plt.ylabel("Number of Students")
     plt.show()
 
 
-# Main menu
 def main():
     students = read_students()
     assignments = read_assignments()
