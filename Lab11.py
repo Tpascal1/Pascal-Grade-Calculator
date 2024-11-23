@@ -76,7 +76,7 @@ def assignment_stats(assignment_names, assignments, submissions):
         return
 
     score = [score for _, score in submissions.get(assignment_id, [])]
-    if not scores:
+    if not score:
         print("No submissions found for this assignment")
         return
 
