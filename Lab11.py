@@ -118,17 +118,17 @@ def main():
         if choice == "1":
             student_name = input("What is the student's name: ")
             calculate_grade(student_name, students, assignments, submissions)
-            continue
+            break
 
         elif choice == "2":
             assignment_name = input("What is the assignment name: ")
             assignment_stats(assignment_name, assignments, submissions)
-            continue
+            break
 
         elif choice == "3":
             assignment_name = input("What is the assignment name: ")
             assignment_graph(assignment_name, assignments, submissions)
-            continue
+            break
         else:
             print("Exiting program.")
             break
