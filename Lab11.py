@@ -80,10 +80,10 @@ def assignment_stats(assignment_names, assignments, submissions):
         print("No submissions found for this assignment")
         return
 
-    min_score, max_score, avg_score = min(score), max(score), sum(score)/len(score)
-    print(f"Avg:{math.floor(avg_score)}%")
-    print(f"Min:{min_score}%")
-    print(f"Max:{max_score}%")
+    min_score, max_score, avg_score = math.floor(min(score)), math.floor(max(score)), math.floor(sum(score)/len(score))
+    print(f"Min: {min_score}%")
+    print(f"Avg: {avg_score}")
+    print(f"Max: {max_score}%")
 
 
 
