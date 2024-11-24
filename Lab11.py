@@ -82,7 +82,7 @@ def assignment_stats(assignment_names, assignments, submissions):
 
     min_score, max_score, avg_score = math.floor(min(score)), math.floor(max(score)), math.floor(sum(score)/len(score))
     print(f"Min: {min_score}%")
-    print(f"Avg: {avg_score}")
+    print(f"Avg: {avg_score}%")
     print(f"Max: {max_score}%")
 
 
